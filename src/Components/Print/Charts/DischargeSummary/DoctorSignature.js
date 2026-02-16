@@ -42,7 +42,7 @@ const DoctorSignature = ({ doctor }) => {
           justifyContent: "center",
         }}
       >
-        {doctor?.doctorData?.signature && (
+        {!!doctor?.doctorData?.signature && (
           <View
             style={{
               width: "100%",
@@ -54,7 +54,7 @@ const DoctorSignature = ({ doctor }) => {
             {renderImage(doctor?.doctorData?.signature, 200)}
           </View>
         )}
-        {doctor?.doctorData?.name && (
+        {!!doctor?.doctorData?.name && (
           <Text
             style={{
               lineHeight: 1.2,
@@ -101,7 +101,7 @@ const DoctorSignature = ({ doctor }) => {
           justifyContent: "center",
         }}
       >
-        {doctor?.psychologistData?.signature && (
+        {!!doctor?.psychologistData?.signature && (
           <View
             style={{
               width: "100%",
@@ -113,7 +113,7 @@ const DoctorSignature = ({ doctor }) => {
             {renderImage(doctor?.psychologistData?.signature, 200)}
           </View>
         )}
-        {doctor?.psychologistData?.name && (
+        {!!doctor?.psychologistData?.name && (
           <Text
             style={{
               lineHeight: 1.2,

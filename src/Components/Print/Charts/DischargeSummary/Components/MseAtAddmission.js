@@ -5,17 +5,17 @@ const MseAtAddmission = (props) => {
   const data = props?.data ?? {};
   return (
     <React.Fragment>
-      {(data?.mseAddmission?.appearance ||
-        data?.mseAddmission?.ecc ||
-        data?.mseAddmission?.speech ||
-        data?.mseAddmission?.mood ||
-        data?.mseAddmission?.affect ||
-        data?.mseAddmission?.thoughts ||
-        data?.mseAddmission?.perception ||
-        data?.mseAddmission?.memory ||
-        data?.mseAddmission?.abstractThinking ||
-        data?.mseAddmission?.socialJudgment ||
-        data?.mseAddmission?.insight) && (
+      {(!!data?.mseAddmission?.appearance ||
+        !!data?.mseAddmission?.ecc ||
+        !!data?.mseAddmission?.speech ||
+        !!data?.mseAddmission?.mood ||
+        !!data?.mseAddmission?.affect ||
+        !!data?.mseAddmission?.thoughts ||
+        !!data?.mseAddmission?.perception ||
+        !!data?.mseAddmission?.memory ||
+        !!data?.mseAddmission?.abstractThinking ||
+        !!data?.mseAddmission?.socialJudgment ||
+        !!data?.mseAddmission?.insight) && (
           <View style={props?.styles.marginBottom}>
             {/* wrap={false} */}
             <Text style={props?.styles.fontSize13}>MSE at Addmission</Text>
@@ -28,7 +28,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Appearance and Behavior-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -45,7 +45,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>ECC / RAPPORT-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -62,7 +62,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Speech-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -79,7 +79,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Mood-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -96,7 +96,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Affect-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -113,7 +113,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Thoughts-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -130,7 +130,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Perception-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -147,7 +147,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Memory-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -164,7 +164,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Abstract Thinking-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -181,7 +181,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Social Judgment-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>
@@ -198,7 +198,7 @@ const MseAtAddmission = (props) => {
                 wrap={false}
               >
                 <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                  <Text style={props?.styles.blackCircle}></Text>
+                  <View style={props?.styles.blackCircle}></View>
                   <Text>Insight-</Text>
                 </View>
                 <Text style={{ ...props?.styles.w70 }}>

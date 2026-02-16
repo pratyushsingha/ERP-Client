@@ -1,11 +1,32 @@
 import React from "react";
 import { StyleSheet, View, Text, Font } from "@react-pdf/renderer";
 import Roboto from "../../../../assets/fonts/Roboto-Bold.ttf";
-
-//components
 import MseAtDischarge from "./Components/MseAtDischarge";
 import MseAtAddmission from "./Components/MseAtAddmission";
 import PrescriptionTable from "../OPD/Prescription/Table";
+//fonts
+import TroiDevanagariHindi from "../../../../assets/fonts/TiroDevanagariHindi-Regular.ttf";
+import TroiDevanagariMarathi from "../../../../assets/fonts/TiroDevanagariMarathi-Regular.ttf";
+
+Font.register({
+  family: "Marathi",
+  fonts: [
+    {
+      src: TroiDevanagariMarathi,
+      // fontWeight: '',
+    },
+  ],
+});
+
+Font.register({
+  family: "Hindi",
+  fonts: [
+    {
+      src: TroiDevanagariHindi,
+      // fontWeight: '',
+    },
+  ],
+});
 
 //medicines table
 // import PrescriptionTable from "../Prescription/Table";
@@ -113,13 +134,13 @@ const SummaryBody = ({ chart, patient }) => {
         >
           Discharge Summary
         </Text>
-        {data?.diagnosis && (
+        {!!data?.diagnosis && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>Diagnosis:</Text>
             <Text style={styles.preText}>{clean(data?.diagnosis)?.trim() || ""}</Text>
           </View>
         )}
-        {data?.presentingSymptoms && (
+        {!!data?.presentingSymptoms && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>Presenting Symptoms:</Text>
             <Text style={styles.preText}>{clean(data?.presentingSymptoms) || ""}</Text>
@@ -127,30 +148,30 @@ const SummaryBody = ({ chart, patient }) => {
         )}
         {/* MSE AT ADDMISSION */}
         <MseAtAddmission data={data} styles={styles} />
-        {data?.pastHistory && (
+        {!!data?.pastHistory && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>PAST HISTORY:</Text>
             <Text style={styles.preText}>{clean(data?.pastHistory) || ""}</Text>
           </View>
         )}
-        {data?.medicalHistory && (
+        {!!data?.medicalHistory && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>MEDICAL HISTORY:</Text>
             <Text style={styles.preText}>{clean(data?.medicalHistory) || ""}</Text>
           </View>
         )}
-        {data?.familyHistory && (
+        {!!data?.familyHistory && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>RELEVANT FAMILY HISTORY :</Text>
             <Text style={styles.preText}>{clean(data?.familyHistory) || ""}</Text>
           </View>
         )}
-        {(data?.personalHistory?.smoking ||
-          data?.personalHistory?.chewingTobacco ||
-          data?.personalHistory?.alcohol) && (
+        {(!!data?.personalHistory?.smoking ||
+          !!data?.personalHistory?.chewingTobacco ||
+          !!data?.personalHistory?.alcohol) && (
             <View style={styles.marginBottom}>
               <Text style={styles.fontSize13}>PERSONAL HISTORY:</Text>
-              {data?.personalHistory?.smoking && (
+              {!!data?.personalHistory?.smoking && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>Smoking</Text>
                   <Text style={styles.w5}>:</Text>
@@ -159,7 +180,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.personalHistory?.chewingTobacco && (
+              {!!data?.personalHistory?.chewingTobacco && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>Chewing Tobacco</Text>
                   <Text style={styles.w5}>:</Text>
@@ -168,7 +189,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.personalHistory?.alcohol && (
+              {!!data?.personalHistory?.alcohol && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>Alcohol</Text>
                   <Text style={styles.w5}>:</Text>
@@ -179,17 +200,17 @@ const SummaryBody = ({ chart, patient }) => {
               )}
             </View>
           )}
-        {(data?.physicalExamination?.temprature ||
-          data?.physicalExamination?.pulse ||
-          data?.physicalExamination?.bp ||
-          data?.physicalExamination?.cvs ||
-          data?.physicalExamination?.rs ||
-          data?.physicalExamination?.abdomen ||
-          data?.physicalExamination?.cns ||
-          data?.physicalExamination?.others) && (
+        {(!!data?.physicalExamination?.temprature ||
+          !!data?.physicalExamination?.pulse ||
+          !!data?.physicalExamination?.bp ||
+          !!data?.physicalExamination?.cvs ||
+          !!data?.physicalExamination?.rs ||
+          !!data?.physicalExamination?.abdomen ||
+          !!data?.physicalExamination?.cns ||
+          !!data?.physicalExamination?.others) && (
             <View style={styles.marginBottom}>
               <Text style={styles.fontSize13}>PHYSICAL EXAMINATION:</Text>
-              {data?.physicalExamination?.temprature && (
+              {!!data?.physicalExamination?.temprature && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>Temprature</Text>
                   <Text style={styles.w5}>:</Text>
@@ -198,7 +219,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.physicalExamination?.pulse && (
+              {!!data?.physicalExamination?.pulse && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>pulse</Text>
                   <Text style={styles.w5}>:</Text>
@@ -207,7 +228,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.physicalExamination?.bp && (
+              {!!data?.physicalExamination?.bp && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>B.P</Text>
                   <Text style={styles.w5}>:</Text>
@@ -216,7 +237,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.physicalExamination?.cvs && (
+              {!!data?.physicalExamination?.cvs && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>CVS</Text>
                   <Text style={styles.w5}>:</Text>
@@ -225,7 +246,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.physicalExamination?.rs && (
+              {!!data?.physicalExamination?.rs && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>RS</Text>
                   <Text style={styles.w5}>:</Text>
@@ -234,7 +255,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.physicalExamination?.abdomen && (
+              {!!data?.physicalExamination?.abdomen && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>Abdomen</Text>
                   <Text style={styles.w5}>:</Text>
@@ -243,7 +264,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.physicalExamination?.cns && (
+              {!!data?.physicalExamination?.cns && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>CNS</Text>
                   <Text style={styles.w5}>:</Text>
@@ -252,7 +273,7 @@ const SummaryBody = ({ chart, patient }) => {
                   </Text>
                 </View>
               )}
-              {data?.physicalExamination?.others && (
+              {!!data?.physicalExamination?.others && (
                 <View style={{ ...styles.checkBlock, ...styles.paddingLeft5 }}>
                   <Text style={styles.w25}>Others</Text>
                   <Text style={styles.w5}>:</Text>
@@ -263,7 +284,7 @@ const SummaryBody = ({ chart, patient }) => {
               )}
             </View>
           )}
-        {data?.investigation && (
+        {!!data?.investigation && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>
               INVESTIGATIONS : (all reports attached with Discharge Card)
@@ -271,7 +292,7 @@ const SummaryBody = ({ chart, patient }) => {
             <Text style={styles.preText}>{clean(data?.investigation) || ""}</Text>
           </View>
         )}
-        {data?.discussion && (
+        {!!data?.discussion && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>DISCUSSION / WARD MANAGEMENT:</Text>
             <Text style={styles.preText}>{clean(data?.discussion) || ""}</Text>
@@ -286,7 +307,7 @@ const SummaryBody = ({ chart, patient }) => {
               <PrescriptionTable medicines={data.treatment} />
             </View>
           </>
-        ) : data?.treatment ? (
+        ) : !!data?.treatment ? (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>GIVEN TREATMENTS:</Text>
             <Text style={styles.preText}>{clean(data?.treatment) || ""}</Text>
@@ -294,13 +315,13 @@ const SummaryBody = ({ chart, patient }) => {
         ) : (
           null
         )}
-        {data?.refernces && (
+        {!!data?.refernces && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>References:</Text>
             <Text style={styles.preText}>{clean(data?.refernces) || ""}</Text>
           </View>
         )}
-        {data?.modifiedTreatment && (
+        {!!data?.modifiedTreatment && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>
               Modified ECTs / Ketamine / Other Treatment:
@@ -308,14 +329,14 @@ const SummaryBody = ({ chart, patient }) => {
             <Text style={styles.preText}>{clean(data?.modifiedTreatment) || ""}</Text>
           </View>
         )}
-        {data?.deportAdministered && (
+        {!!data?.deportAdministered && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>LA / Depot Administered:</Text>
             <Text style={styles.preText}>{clean(data?.deportAdministered) || ""}</Text>
           </View>
         )}
         <MseAtDischarge data={data} styles={styles} />
-        {data?.patientStatus && (
+        {!!data?.patientStatus && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>
               PATIENT CONDITION / STATUS AT THE TIME OF DISCHARGE:
@@ -348,7 +369,7 @@ const SummaryBody = ({ chart, patient }) => {
             </Text>
           </View>
         )} */}
-        {typeof data?.followUp === "string" && data?.followUp.trim() && (
+        {!!data?.followUp && (
           <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>Follow-Up:</Text>
             <View style={styles.paddingLeft5}>
@@ -376,8 +397,8 @@ const SummaryBody = ({ chart, patient }) => {
             </Text>
           </View>
         )} */}
-        {typeof data?.note === "string" && data?.note.trim() && (
-          <View style={styles.marginBottom} wrap={false}>
+        {!!data?.note && (
+          <View style={styles.marginBottom}>
             <Text style={styles.fontSize13}>Note:</Text>
             <Text style={styles.preText}>{clean(data.note)?.trim()}</Text>
           </View>

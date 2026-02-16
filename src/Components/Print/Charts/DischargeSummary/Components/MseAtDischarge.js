@@ -5,17 +5,17 @@ const MseAtDischarge = (props) => {
   const data = props?.data ?? {};
   return (
     <React.Fragment>
-      {(data?.mseDischarge?.appearance ||
-        data?.mseDischarge?.ecc ||
-        data?.mseDischarge?.speech ||
-        data?.mseDischarge?.mood ||
-        data?.mseDischarge?.affect ||
-        data?.mseDischarge?.thoughts ||
-        data?.mseDischarge?.perception ||
-        data?.mseDischarge?.memory ||
-        data?.mseDischarge?.abstractThinking ||
-        data?.mseDischarge?.socialJudgment ||
-        data?.mseDischarge?.insight) && (
+      {(!!data?.mseDischarge?.appearance ||
+        !!data?.mseDischarge?.ecc ||
+        !!data?.mseDischarge?.speech ||
+        !!data?.mseDischarge?.mood ||
+        !!data?.mseDischarge?.affect ||
+        !!data?.mseDischarge?.thoughts ||
+        !!data?.mseDischarge?.perception ||
+        !!data?.mseDischarge?.memory ||
+        !!data?.mseDischarge?.abstractThinking ||
+        !!data?.mseDischarge?.socialJudgment ||
+        !!data?.mseDischarge?.insight) && (
         <View style={props?.styles.marginBottom}>
           {/* wrap={false} */}
           <Text style={props?.styles.fontSize13}>
@@ -29,7 +29,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Appearance and Behavior-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -45,7 +45,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>ECC / RAPPORT-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -61,7 +61,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Speech-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -77,7 +77,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Mood-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -93,7 +93,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Affect-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -109,7 +109,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Thoughts-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -125,7 +125,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Perception-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -141,7 +141,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row, marginTop:2 }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Memory-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -157,7 +157,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Abstract Thinking-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -173,7 +173,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Social Judgment-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>
@@ -189,7 +189,7 @@ const MseAtDischarge = (props) => {
               }}
             >
               <View style={{ ...props?.styles.w30, ...props?.styles.row }}>
-                <Text style={props?.styles.blackCircle}></Text>
+                <View style={props?.styles.blackCircle}></View>
                 <Text>Insight-</Text>
               </View>
               <Text style={{ ...props?.styles.w70 }}>

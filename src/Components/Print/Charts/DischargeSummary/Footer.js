@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderTop: "1px solid black",
   },
   textNowrap: {
-    whiteSpace: "nowrap",
+    // whiteSpace: "nowrap",
   },
   paddingTop5: {
     paddingTop: 5,
@@ -87,13 +87,13 @@ const styles = StyleSheet.create({
   fixedHeading: {
     // textAlign: 'center',
     borderTop: "1px dashed #1d1d1d",
-    marginTop: 25,
+    // marginTop: 25,
     paddingTop: 5,
     paddingBottom: 10,
     fontSize: "10px",
   },
   fixedContactInfo: {
-    marginTop: 2,
+    // marginTop: 2,
     flexDirection: "row",
     // justifyContent: 'space-between',
     paddingBottom: 20,
@@ -134,7 +134,7 @@ const SummaryFooter = ({ chart, patient, center }) => {
               ...styles.borderTop,
             }}
           >
-            <Text>{data?.consultantPsychologist || ""}</Text>
+            <Text>{data?.consultantPsychologist || " "}</Text>
             <Text>Consultant Psychologist</Text>
           </View>
           <View
@@ -148,7 +148,7 @@ const SummaryFooter = ({ chart, patient, center }) => {
               ...styles.textCap,
             }}
           >
-            <Text>{data?.consultantSignature || ""}</Text>
+            <Text>{data?.consultantSignature || " "}</Text>
             <Text>MO/SMO/CMO/Consultant</Text>
           </View>
         </View>
@@ -157,7 +157,7 @@ const SummaryFooter = ({ chart, patient, center }) => {
             Discharge Summary Prepared By: {data?.summaryPreparedBy || ""}
           </Text>
         </View>
-        {data?.typeOfDischarge && (
+        {!!data?.typeOfDischarge && (
           <View
             style={{ ...styles.row, ...styles.marginBottom, ...styles.col12 }}
           >
@@ -167,29 +167,18 @@ const SummaryFooter = ({ chart, patient, center }) => {
                 ...styles.fontBold,
               }}
             >
-              Type of Discharge :{" "}
-              <Text style={styles.fontHindi}>
-                {data?.typeOfDischarge || ""}
-              </Text>
+              Type of Discharge : <Text>{data?.typeOfDischarge || ""}</Text>
             </Text>
-            {/* <Text style={styles.col6}>Date: 18/06/2022</Text> */}
           </View>
         )}
-        {data?.dischargeRoutine && (
+        {!!data?.dischargeRoutine && (
           <Text
             style={{
               ...styles.fontBold,
               ...styles.marginBottom,
             }}
           >
-            Discharge Routine:{" "}
-            <Text
-              style={{
-                ...styles.fontMarathi,
-              }}
-            >
-              {data?.dischargeRoutine || ""}
-            </Text>
+            Discharge Routine: <Text>{data?.dischargeRoutine || ""}</Text>
           </Text>
         )}
         <View style={{ ...styles.row, ...styles.marginBottom }}>
@@ -208,13 +197,13 @@ const SummaryFooter = ({ chart, patient, center }) => {
           </Text>
           <Text style={styles.col6}>Signature</Text>
         </View>
-        <DoctorSignature doctor={patient} />
+        {!!patient && <DoctorSignature doctor={patient} />}
       </View>
       {/* <DoctorSignature doctor={chart?.author} /> */}
 
       <View style={{ marginTop: "auto" }} fixed>
         <View style={styles.fixedHeading}>
-          <Text>Reg Add: {center?.address?.replace(/\n/g, "") || ""}</Text>
+          <Text>Reg Add: {center?.address?.replace(/\n/g, "") || " "}</Text>
         </View>
         <View style={styles.fixedContactInfo}>
           <Text>Tel: +919822207761 | +919833365230</Text>
@@ -233,5 +222,6 @@ const SummaryFooter = ({ chart, patient, center }) => {
     </React.Fragment>
   );
 };
+
 
 export default SummaryFooter;
