@@ -13,7 +13,8 @@ const Prescription = ({ data, startDate, endDate }) => {
           <div></div>
           {startDate && endDate && (
             <i className="mb-0 text-muted" style={{ fontSize: "13px" }}>
-              {moment(startDate).format("MMM D, YYYY")} - {moment(endDate).format("MMM D, YYYY")}
+              {moment(startDate).format("MMM D, YYYY")} -{" "}
+              {moment(endDate).format("MMM D, YYYY")}
             </i>
           )}
         </div>
@@ -23,9 +24,7 @@ const Prescription = ({ data, startDate, endDate }) => {
               <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
                 Dr Notes:-
               </span>
-              <span className="fs-xs-9 fs-md-12">
-              {data.drNotes}
-              </span>
+              <span className="fs-xs-9 fs-md-12">{data.drNotes}</span>
             </p>
           </div>
         )}
@@ -35,9 +34,7 @@ const Prescription = ({ data, startDate, endDate }) => {
               <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
                 Diagnosis :-
               </span>
-              <span className="fs-xs-9 fs-md-12">
-              {data.diagnosis}
-              </span>
+              <span className="fs-xs-9 fs-md-12">{data.diagnosis}</span>
             </p>
           </div>
         )}
@@ -59,9 +56,7 @@ const Prescription = ({ data, startDate, endDate }) => {
               <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
                 Observation:-
               </span>
-              <span className="fs-xs-9 fs-md-12"> 
-              {data.observation}
-              </span>
+              <span className="fs-xs-9 fs-md-12">{data.observation}</span>
             </p>
           </div>
         )}
@@ -71,9 +66,7 @@ const Prescription = ({ data, startDate, endDate }) => {
               <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
                 Complaints:-
               </span>
-              <span className="fs-xs-9 fs-md-12">
-              {data.complaints}
-              </span>
+              <span className="fs-xs-9 fs-md-12">{data.complaints}</span>
             </p>
           </div>
         )}
@@ -84,25 +77,41 @@ const Prescription = ({ data, startDate, endDate }) => {
               <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
                 Diagnosis ICD10 Code 1 :-
               </span>
-              <span className="fs-xs-9 fs-md-12">
-              {data.ICD10_Code}
-              </span>
+              <span className="fs-xs-9 fs-md-12">{data.ICD10_Code}</span>
             </p>
           </div>
         )}
-        {data?.ICD10_Code2 && (
+        {data?.ICD10_Code2 ? (
           <div className="d-flex justify-content-between mb-2">
             <p className="fs-xs-9 font-size-14 mb-0">
               <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
-               Diagnosis ICD10 Code 2 :-
+                Diagnosis ICD10 Code 2 :
               </span>
-              <span className="fs-xs-9 fs-md-12">
-              {data.ICD10_Code2}
-              </span>
+              <span className="fs-xs-9 fs-md-12">{data.ICD10_Code2}</span>
             </p>
           </div>
-        )}
-        {/* )} */}
+        ) : Array.isArray(data?.icdCode2) ? (
+          data.icdCode2.length > 0 && (
+            <div className="d-flex  mb-2">
+              <p className="fs-xs-9 font-size-14 mb-0">
+                <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
+                  Diagnosis ICD10 Code 2 :
+                </span>
+              </p>
+
+              <div>
+                {data.icdCode2
+                  .filter(item => item?.code)
+                  .map((item, index, arr) => (
+                    <div className="fs-xs-12" key={item?.code_id || index}>
+                      {item.code}
+                      {index !== arr.length - 1 ? "," : ""}
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )
+        ) : null}
         <div className="d-block text-center mt-3 mb-3">
           <Divider />
         </div>
@@ -118,9 +127,7 @@ const Prescription = ({ data, startDate, endDate }) => {
               <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
                 Notes:-
               </span>
-              <span className="fs-xs-9 fs-md-12">
-              {data.notes}
-              </span>
+              <span className="fs-xs-9 fs-md-12">{data.notes}</span>
             </p>
           </div>
         )}
@@ -130,9 +137,7 @@ const Prescription = ({ data, startDate, endDate }) => {
               <span className="display-6 font-semi-bold fs-xs-10 fs-md-14 font-size-20 me-3">
                 Investigation Plan:-
               </span>
-              <span className="fs-xs-9 fs-md-12">
-              {data.investigationPlan}
-              </span>
+              <span className="fs-xs-9 fs-md-12">{data.investigationPlan}</span>
             </p>
           </div>
         )}

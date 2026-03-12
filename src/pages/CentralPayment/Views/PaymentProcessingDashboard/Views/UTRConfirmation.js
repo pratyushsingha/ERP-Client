@@ -71,6 +71,7 @@ const UTRCofrmation = ({ loading, approvals, centerAccess, userCenters, activeTa
                 page,
                 limit,
                 centers: centers,
+                financeApprovalStatus: "APPROVED",
                 approvalStatus: "APPROVED",
                 currentPaymentStatus: "PENDING",
                 processStatus: "COMPLETED",

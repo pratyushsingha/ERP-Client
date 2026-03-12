@@ -32,12 +32,12 @@ code {
 }
 
 /* Align react-select text vertically */
-.react-select__value-container {
+/* .react-select__value-container {
   height: 32px !important;
   padding: 0 8px !important;
   display: flex;
   align-items: center;
-}
+} */
 
 /* Remove extra padding */
 .react-select__control {
@@ -87,4 +87,41 @@ code {
 .weekoff-link:hover {
   color: rgba(13, 110, 253, 1);
   text-decoration: underline;
+}
+
+.image-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.issue-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-container:hover .issue-image {
+  filter: blur(1.2px);
+}
+
+.image-container:hover .image-overlay {
+  opacity: 1;
 }

@@ -8,7 +8,7 @@ import DataTableComponent from "../../../../Components/Common/DataTable";
 import { leaveRequestsColumns } from "../../components/Table/Columns/leaveRequests";
 import { useMediaQuery } from "../../../../Components/Hooks/useMediaQuery";
 import classnames from "classnames";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePermissions } from "../../../../Components/Hooks/useRoles";
 import { toast } from "react-toastify";
 import { useAuthError } from "../../../../Components/Hooks/useAuthError";
@@ -16,17 +16,21 @@ import { useSelector } from "react-redux";
 
 const ManageLeaves = () => {
   const isMobile = useMediaQuery("(max-width: 1000px)");
-  const [activeTab, setActiveTab] = useState("pending");
   const [actionLoadingId, setActionLoadingId] = useState(null);
   const handleAuthError = useAuthError();
 
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const querySearch = searchParams.get("q") || "";
+  const queryTab = searchParams.get("tab") || "pending";
+  const queryCenter = searchParams.get("center") || "ALL";
+  const queryLeaveId = searchParams.get("id") || "";
+  const [activeTab, setActiveTab] = useState(queryTab);
+  const [search, setSearch] = useState(querySearch);
+  const [debouncedSearch, setDebouncedSearch] = useState(querySearch);
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedMonth, setSelectedMonth] = useState("all");
   const [loading, setLoading] = useState(false);
-  const [selectedCenter, setSelectedCenter] = useState("ALL");
+  const [selectedCenter, setSelectedCenter] = useState(queryCenter);
   const [requestsData, setRequestsData] = useState([]);
   const user = useSelector((state) => state.User);
   const navigate = useNavigate();
@@ -47,12 +51,12 @@ const ManageLeaves = () => {
   const centerOptions = [
     ...(user?.centerAccess?.length > 1
       ? [
-          {
-            value: "ALL",
-            label: "All Centers",
-            isDisabled: false,
-          },
-        ]
+        {
+          value: "ALL",
+          label: "All Centers",
+          isDisabled: false,
+        },
+      ]
       : []),
     ...(user?.centerAccess?.map((id) => {
       const center = user?.userCenters?.find((c) => c._id === id);
@@ -97,6 +101,7 @@ const ManageLeaves = () => {
         year: selectedYear,
         month: selectedMonth,
         ...(debouncedSearch && { search: debouncedSearch }),
+        ...(queryLeaveId !== "" && { leaveId: queryLeaveId })
       });
       // console.log("res", res);
       setRequestsData(res?.data || []);
@@ -130,6 +135,17 @@ const ManageLeaves = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search.toLowerCase());
+      setSearchParams((prev) => {
+        if (search.trim()) {
+          prev.set("q", search);
+        } else {
+          prev.delete("q");
+          prev.delete("tab");
+          prev.delete("center");
+          prev.delete("id");
+        }
+        return prev;
+      });
     }, 500);
 
     return () => clearTimeout(timer);
@@ -141,11 +157,11 @@ const ManageLeaves = () => {
     if (!Array.isArray(requestsData)) return [];
 
     return requestsData.map((item) => ({
-      ...item.leaves, 
+      ...item.leaves,
       parentDocId: item._id,
-      leaveId: item.leaves._id, 
+      leaveId: item.leaves._id,
       employeeId: item.id,
-      center: item.center, 
+      center: item.center,
       approvalAuthority: item.approvalAuthority,
       createdAt: item.createdAt,
       eCode: item.eCode,

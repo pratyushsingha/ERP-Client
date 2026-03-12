@@ -202,6 +202,14 @@ const pages = [
       {
         name: "Timeline",
       },
+      {
+        name: "Belongings",
+        permissions: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+      },
     ],
   },
   {
@@ -293,6 +301,13 @@ const pages = [
     icon: "bx bx-body",
   },
   {
+    id: "issues",
+    label: "Issues",
+    name: "Issues",
+    link: "/issues",
+    icon: "bx bx-error-circle",
+  },
+  {
     id: "hrms",
     label: "HRMS",
     name: "HRMS",
@@ -306,7 +321,16 @@ const pages = [
     link: "/webcamstats",
     icon: "bx bx-group",
   },
+  {
+    id: "tally",
+    label: "Tally",
+    name: "Tally",
+    link: "/tally",
+    icon: "bx bx-transfer",
+  },
 ];
+
+
 
 export const WebcamStats = [
   {
@@ -534,6 +558,12 @@ export const HR = [
   //   link: "/hr/dashboard",
   //   icon: "bx bx-home",
   // },
+  {
+    id: "my-pending-approvals",
+    label: "My Pending Approvals",
+    icon: "bx bx-grid-alt",
+    link: "/hr/my-pending-approvals",
+  },
   {
     id: "master-employee",
     label: "Master Employee",
@@ -865,7 +895,7 @@ export const HR = [
     label: "Salary",
     icon: "bx bx-bar-chart-alt-2",
     link: "/hr/salary",
-  }
+  },
 ];
 
 export const HRMS = [
@@ -965,6 +995,52 @@ export const HRMS = [
   //     },
   //   ],
   // },
+];
+
+export const ISSUES = [
+  {
+    id: "tickets-dashboard",
+    label: "Tickets Dashboard",
+    icon: "bx bx-bar-chart-alt-2",
+    link: "/issues/dashboard",
+  },
+  {
+    id: "raise-ticket",
+    label: "Raise Ticket",
+    icon: "bx bx-message-square-add",
+    link: "/issues/raise/ticket",
+  },
+  {
+    id: "issues-type",
+    label: "Issues",
+    icon: "bx bx-error-circle",
+    children: [
+      {
+        id: "tech-issues",
+        label: "Technical",
+        link: "/issues/tech",
+        icon: "bx bx-chip",
+      },
+      {
+        id: "purchase-issues",
+        label: "Purchase",
+        link: "/issues/purchase",
+        icon: "bx bx-category",
+      },
+      {
+        id: "review-submissions",
+        label: "Review Submissions",
+        link: "/issues/review-submissions",
+        icon: "bx bx-check-shield"
+      },
+    ],
+  },
+  {
+    id: "my-issues",
+    label: "My Tickets",
+    icon: "bx bx-user-circle",
+    link: "/issues/my/issues",
+  }
 ];
 
 export default pages;

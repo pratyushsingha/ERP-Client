@@ -79,6 +79,8 @@ const UploadedFiles = ({ id, chartId, files }) => {
     });
   };
 
+
+
   return (
     <Row className="row-gap-3 mb-3">
       <Col xs={12}>
@@ -123,9 +125,28 @@ const DetailAdmission = ({
   const dispatch = useDispatch();
   const [consentFiles, setConsentFiles] = useState();
   const [formStep, setFormStep] = useState(CHIEF_COMPLAINTS);
+  console.log("editChartData", editChartData);
 
   const detailAdmissionForm = editChartData?.detailAdmission;
   const isOldMentalExamination = Boolean(detailAdmissionForm?.mentalExamination);
+
+  console.log("detailAdmissionForm", detailAdmissionForm);
+
+  const isEdit = Boolean(editChartData?._id);
+
+  const hasExistingDiagnosis =
+    isEdit &&
+    detailAdmissionForm?.doctorSignature?.diagnosis?.length > 0;
+
+  console.log("hasExistingDiagnosis", hasExistingDiagnosis);
+
+  const hasExistingProDiagnosis =
+    isEdit &&
+    detailAdmissionForm?.doctorSignature?.provisionaldiagnosis?.length > 0;
+
+  console.log("hasExistingProDiagnosis", hasExistingProDiagnosis);
+
+
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
@@ -165,12 +186,16 @@ const DetailAdmission = ({
       referral: detailAdmissionForm
         ? detailAdmissionForm.detailAdmission?.referral
         : "",
-      provisionalDiagnosis: detailAdmissionForm
-        ? detailAdmissionForm.detailAdmission?.provisionalDiagnosis
-        : "",
-      revisedDiagnosis: detailAdmissionForm
-        ? detailAdmissionForm.detailAdmission?.revisedDiagnosis
-        : "",
+      provisionaldiagnosis: detailAdmissionForm
+        ? detailAdmissionForm.doctorSignature?.provisionaldiagnosis?.map(d => d.code_id) || []
+        : [],
+
+      diagnosis: detailAdmissionForm
+        ? detailAdmissionForm.doctorSignature?.diagnosis?.map(d => d.code_id) || []
+        : [],
+
+
+
       //detail history
       informant: detailAdmissionForm
         ? detailAdmissionForm.detailHistory?.informant
@@ -393,11 +418,15 @@ const DetailAdmission = ({
         : "",
       //diagnosis & doctor signature
       provisionaldiagnosis: detailAdmissionForm
-        ? detailAdmissionForm.doctorSignature?.provisionaldiagnosis
-        : "",
+        ? detailAdmissionForm.doctorSignature?.provisionaldiagnosis?.map(d => d.code_id) || []
+        : [],
+
       diagnosis: detailAdmissionForm
-        ? detailAdmissionForm.doctorSignature?.diagnosis
-        : "",
+        ? detailAdmissionForm.doctorSignature?.diagnosis?.map(d => d.code_id) || []
+        : [],
+
+
+
       managmentPlan: detailAdmissionForm
         ? detailAdmissionForm.doctorSignature?.managmentPlan
         : "",
@@ -414,10 +443,116 @@ const DetailAdmission = ({
       date: chartDate,
       type,
     },
+
     validationSchema: Yup.object({
       patient: Yup.string().required("Patient is required"),
       center: Yup.string().required("Center is required"),
       chart: Yup.string().required("Chart is required"),
+
+      provisionaldiagnosis: Yup.array()
+        .of(Yup.string())
+        .nullable()
+        .test(
+          "required-if-edit-provisional",
+          "Please Re-Enter Provisional Diagnosis",
+          function (value) {
+
+            const isEdit = Boolean(editChartData?._id);
+
+            const existing =
+              detailAdmissionForm?.doctorSignature?.provisionaldiagnosis;
+
+            const hasValidCodeObject =
+              isEdit &&
+              Array.isArray(existing) &&
+              existing.some(
+                (item) =>
+                  item &&
+                  typeof item === "object" &&
+                  item.code?.trim() &&
+                  item.code_id?.trim()
+              );
+
+            if (hasValidCodeObject) return true;
+
+
+            const hasExisting =
+              isEdit &&
+              Array.isArray(existing) &&
+              existing.filter(Boolean).length > 0;
+
+            if (!hasExisting) return true;
+
+            return Array.isArray(value) && value.filter(Boolean).length > 0;
+          }
+        ),
+
+      diagnosis: Yup.array()
+        .of(Yup.string())
+        .nullable()
+        .test(
+          "required-if-edit",
+          "Please Re-Enter Final Diagnosis",
+          function (value) {
+
+            const isEdit = Boolean(editChartData?._id);
+
+            const existingDiagnosis =
+              detailAdmissionForm?.doctorSignature?.diagnosis;
+
+            const hasValidCodeObject =
+              isEdit &&
+              Array.isArray(existingDiagnosis) &&
+              existingDiagnosis.some(
+                (item) =>
+                  item &&
+                  typeof item === "object" &&
+                  item.code?.trim() &&
+                  item.code_id?.trim()
+              );
+
+            if (hasValidCodeObject) return true;
+
+            const hasExisting =
+              isEdit &&
+              Array.isArray(existingDiagnosis) &&
+              existingDiagnosis.filter(Boolean).length > 0;
+
+            if (!hasExisting) return true;
+
+            return Array.isArray(value) && value.filter(Boolean).length > 0;
+          }
+        )
+        .test(
+          "no-overlap",
+          "Final Diagnosis cannot be the same as Provisional Diagnosis",
+          function (value) {
+
+            const provisional = this.parent.provisionaldiagnosis;
+
+            const finalArr = Array.isArray(value)
+              ? value.filter(Boolean)
+              : [];
+
+            const provisionalArr = Array.isArray(provisional)
+              ? provisional.filter(Boolean)
+              : [];
+
+            if (finalArr.length === 0 || provisionalArr.length === 0) {
+              return true;
+            }
+
+            const hasOverlap = finalArr.some(v =>
+              provisionalArr.includes(v)
+            );
+
+            return !hasOverlap;
+          }
+        ),
+
+
+
+
     }),
     onSubmit: (values) => {
       /* appending */
@@ -450,6 +585,9 @@ const DetailAdmission = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, detailAdmissionForm]);
+
+
+
 
   const consentUploadedFiles = useMemo(() => {
     return (
@@ -521,6 +659,7 @@ const DetailAdmission = ({
           </div>
           <div className="mt-4">
             <Form
+              key={detailAdmissionForm?._id || "new"}
               onSubmit={(e) => {
                 e.preventDefault();
                 validation.handleSubmit();

@@ -84,11 +84,9 @@ export const permissionList = [
     label: "Central Payment",
     subModules: [
       { name: "CENTRALPAYMENTSPENDING", label: "Expense" },
+      { name: "CENTRALPAYMENTFINANCEAPPROVAL", label: "Finance Approval Dashboard" },
       { name: "CENTRALPAYMENTAPPROVAL", label: "Approval Dashboard" },
-      {
-        name: "CENTRALPAYMENTPROCESSING",
-        label: "Payment Processing Dashboard",
-      },
+      { name: "CENTRALPAYMENTPROCESSING", label: "Payment Processing Dashboard" },
       { name: "CENTRALPAYMENTREPORTS", label: "Reports" },
     ],
   },
@@ -122,6 +120,14 @@ export const permissionList = [
       { name: "LEADLIST", label: "Lead List" },
       { name: "MEDICINELIST", label: "Medicine List" },
       { name: "INTERNLIST", label: "Intern List" },
+    ],
+  },
+  {
+    key: "TALLY",
+    label: "Tally",
+    subModules: [
+      { name: "SEND_TO_TALLY", label: "Send to Tally" },
+      { name: "TALLY_LOGS", label: "Tally Logs" },
     ],
   },
   {
@@ -294,7 +300,10 @@ export const permissionList = [
       // Incentives
       { name: "INCENTIVES_ADD_REQUEST", label: "Incentives Add Request" },
       { name: "INCENTIVES_APPROVAL", label: "Incentives Approval" },
-      { name: "SALARY", label: "Salary" }
+      // Salary
+      { name: "SALARY", label: "Salary" },
+      // My Pending Approvals
+      { name: "MY_PENDING_APPROVALS", label: "My Pending Approvals" },
     ],
   },
   // {
@@ -321,6 +330,17 @@ export const permissionList = [
       { name: "APIKEYS", label: "Apikeys" },
     ],
   },
+  // {
+  //   key: "ISSUES",
+  //   label: "Issues",
+  //   subModules: [
+  //     { name: "TICKET_DASHBOARD", label: "Ticket Dashboard" },
+  //     { name: "RAISE_TICKET", label: "Raise Ticket" },
+  //     { name: "ISSUES", label: "Issues" },
+  //     { name: "MY_ISSUES", label: "My Issues" },
+  //   ],
+  // },
+
 ];
 
 export const modulePermissionOptions = ["READ", "WRITE", "DELETE", "NONE"];

@@ -249,11 +249,11 @@ export const editBillItem = (data) => api.put(url.EDIT_BILL_ITEM, data);
 export const getProceduresByid = (proId) =>
   api.get(`${url.GET_PROCEDURES_BY_ID}/${proId}`);
 
-// export const getProceduresByCenterid = (params = {}) => {
-//   return axios.get(url.GET_PROCEDURES_BY_CENTER_ID, {
-//     params,
-//   });
-// };
+export const getProceduresByCenterid = (params = {}) => {
+  return axios.get(url.GET_PROCEDURES_BY_CENTER_ID, {
+    params,
+  });
+};
 
 export const deleteCenterInProcedure = ({ payload }) => {
   return api.delete(`${url.DETELE_CENTER_IN_PROCEDURE}`, {
@@ -558,6 +558,19 @@ export const deleteBillPermanently = (param) =>
   api.delete(`${url.DELETE_BILL_PERMANENTLY}/${param}`);
 export const postRestoreBill = (data) =>
   api.update(url.POST_RESTORE_BILL, data);
+
+// Write Off
+export const getWriteOff = (data) => {
+  return axios.get(url.GET_WRITE_OFF, {
+    params: {
+      patient: data.patient,
+      addmission: data.addmission,
+      center: data.center,
+    },
+  });
+};
+export const postWriteOff = (payload) =>
+  api.create(url.POST_WRITE_OFF, payload);
 
 //recyclebin
 export const getDeletedCenters = (data) =>
@@ -1000,6 +1013,68 @@ export const getAllEmergencyPatients = (params = {}) => {
 
 export const getICDCodes = () => {
   return api.get(url.GET_ICD_CODES);
+};
+
+// Belongings
+export const searchBelongings = (search) => {
+  return api.get(url.SEARCH_BELONGINGS, {
+    params: {
+      q: encodeURIComponent(search),
+    },
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const createPatientBelonging = (data) => {
+  return api.create(url.PATIENT_BELONGING, data, {
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const updatePatientBelonging = (id, data) => {
+  return api.update(`${url.PATIENT_BELONGING}/${id}`, data, {
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const uploadSignedBelonging = (id, formData) => {
+  return api.update(`${url.PATIENT_BELONGING}/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const getPatientBelongings = (patientId) => {
+  return api.get(url.PATIENT_BELONGING, {
+    params: { patient: patientId },
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const getPatientBelongingById = (id) => {
+  return api.get(`${url.PATIENT_BELONGING}/${id}`, {
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const deletePatientBelonging = (id) => {
+  return api.delete(`${url.PATIENT_BELONGING}/${id}`, {
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
 };
 
 // cash management
@@ -1695,8 +1770,16 @@ export const getEmployeeId = (params = {}) => {
   });
 };
 
-export const getEmployeeFinanceById = (id) => {
-  return api.get(`${url.EMPLOYEE_FINANCE}/${id}`, {
+export const updateEmployeeByKey = (data) => {
+  return api.update(url.EMPLOYEE_BY_KEY, data, {
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const getEmployeeDetailsById = (id) => {
+  return api.get(`${url.EMPLOYEE_DETAILS}/${id}`, {
     headers: {
       "X-No-Cookie-Token": "true",
     },
@@ -2389,6 +2472,18 @@ export const getAttendanceSummary = (params = {}) => {
   });
 };
 
+export const refetchBiometricAttendanace = () => {
+  return api.create(
+    url.REFETCH_BIOMETRIC_ATTENDANCE,
+    {},
+    {
+      headers: {
+        "X-No-Cookie-Token": "true",
+      },
+    },
+  );
+};
+
 export const getAttendanceLogs = (params = {}) => {
   return api.get(url.ATTENDANCE_LOGS, {
     params,
@@ -2575,7 +2670,7 @@ export const payrollBulkAction = (data) => {
     headers: {
       "X-No-Cookie-Token": "true",
     },
-  })
+  });
 };
 
 export const payrollAction = (id, data) => {
@@ -2583,7 +2678,7 @@ export const payrollAction = (id, data) => {
     headers: {
       "X-No-Cookie-Token": "true",
     },
-  })
+  });
 };
 
 export const downloadMonthlyPayrollTemplate = (params = {}) => {
@@ -2602,7 +2697,7 @@ export const getMonthlyAttendance = (params = {}) => {
     headers: {
       "X-No-Cookie-Token": "true",
     },
-  })
+  });
 };
 
 export const uploadMonthlyAttendance = (data) => {
@@ -2614,12 +2709,73 @@ export const uploadMonthlyAttendance = (data) => {
   });
 };
 
+export const getApprovalInbox = (params = {}) => {
+  return api.get(url.GET_APPROVAL_INBOX, {
+    params,
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: "repeat" });
+    },
+  });
+};
+
 // upload file
 export const uploadFile = (data) => {
   return api.create(url.UPLOAD_FILE, data, {
     headers: {
       "Content-Type": "multipart/form-data",
       "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+// Submit assessment form
+
+export const submitAssessment = (id, payload) => {
+  return axios.patch(`${url.SUBMIT_ASSESSMENT_FROM}/${id}`, payload, {
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+// TALLY
+export const sendToTally = (data) => api.create(url.POST_TALLY_SEND, data);
+export const getTallyLogs = (params) => api.get(url.GET_TALLY_LOGS, { params });
+
+// Issues
+
+export const getIssues = (params = {}) => {
+  return axios.get(url.GET_ISSUES, {
+    params,
+  });
+};
+
+export const getMyIssues = (params = {}) => {
+  return axios.get(url.GET_MY_ISSUES, {
+    params,
+  });
+};
+
+export const changeStatus = (data) => {
+  return axios.patch(url.CHANGE_STATUS, data);
+};
+export const approveIssue = (data) => {
+  return axios.patch(url.APPROVE_ISSUE, data)
+}
+export const postIssue = (formData) => {
+  return axios.post(url.POST_ISSUE, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+export const getTicketsDashboardData = ({ month, issueType }) => {
+  return axios.get(url.GET_TICKET_DASHBOARD_DATA, {
+    params: {
+      month,
+      issueType,
     },
   });
 };

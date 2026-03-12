@@ -10,10 +10,10 @@ import { useAuthError } from "../../../Components/Hooks/useAuthError";
 import { toast } from "react-toastify";
 import { capitalizeWords } from "../../../utils/toCapitalize";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
-import { deleteEmployee, getDepartments, getEmployeeFinanceById } from "../../../helpers/backend_helper";
+import { deleteEmployee, getDepartments, getEmployeeDetailsById } from "../../../helpers/backend_helper";
 import { usePermissions } from "../../../Components/Hooks/useRoles";
 import CheckPermission from "../../../Components/HOC/CheckPermission";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { downloadFile } from "../../../Components/Common/downloadFile";
 import EmployeeModal from "../components/EmployeeModal";
 import { renderStatusBadge } from "../../../Components/Common/renderStatusBadge";
@@ -29,11 +29,13 @@ const Employee = () => {
   const user = useSelector((state) => state.User);
   const { data, pagination, loading } = useSelector((state) => state.HR);
   const handleAuthError = useAuthError();
+  const [searchParams] = useSearchParams();
+  const querySearch = searchParams.get("q") || "";
+  const [search, setSearch] = useState(querySearch);
+  const [debouncedSearch, setDebouncedSearch] = useState(querySearch);
   const [selectedCenter, setSelectedCenter] = useState("ALL");
   const [page, setPage] = useState(1);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [limit, setLimit] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -188,11 +190,12 @@ const Employee = () => {
     setSelectedEmployee(row);
     setModalLoading(true);
     try {
-      const res = await getEmployeeFinanceById(row._id);
+      const res = await getEmployeeDetailsById(row._id);
 
       setSelectedEmployee({
         ...row,
         financeDetails: res?.data?.financeDetails,
+        users: res?.data?.users,
       });
 
       setModalOpen(true);

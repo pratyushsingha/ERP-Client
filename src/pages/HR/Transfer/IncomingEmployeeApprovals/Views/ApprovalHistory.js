@@ -7,10 +7,11 @@ import { fetchEmployeeTransfers } from "../../../../../store/features/HR/hrSlice
 import { toast } from "react-toastify";
 import { capitalizeWords } from "../../../../../utils/toCapitalize";
 import { format } from "date-fns";
-import { Input, Spinner } from "reactstrap";
-import DataTable from "react-data-table-component";
+import { Input } from "reactstrap";
 import Select from "react-select";
 import { ExpandableText } from "../../../../../Components/Common/ExpandableText";
+import DataTableComponent from "../../../../../Components/Common/DataTable";
+import { useSearchParams } from "react-router-dom";
 
 
 
@@ -19,12 +20,14 @@ const PendingApprovals = ({ activeTab }) => {
     const user = useSelector((state) => state.User);
     const { data, pagination, loading } = useSelector((state) => state.HR);
     const handleAuthError = useAuthError();
-    const [selectedCenter, setSelectedCenter] = useState("ALL");
+     const [searchParams, setSearchParams] = useSearchParams();
+    const querySearch = searchParams.get("q") || "";
+    const queryCenter = searchParams.get("center") || "ALL";
+    const [search, setSearch] = useState(querySearch);
+    const [debouncedSearch, setDebouncedSearch] = useState(querySearch);
+    const [selectedCenter, setSelectedCenter] = useState(queryCenter);
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
     const [limit, setLimit] = useState(10);
-
     const microUser = localStorage.getItem("micrologin");
     const token = microUser ? JSON.parse(microUser).token : null;
 
@@ -75,6 +78,15 @@ const PendingApprovals = ({ activeTab }) => {
 
         return () => clearTimeout(handler);
     }, [search]);
+
+    useEffect(() => {
+        const q = searchParams.get("q") || "";
+        const c = searchParams.get("center") || "ALL";
+        setSearch(q);
+        setDebouncedSearch(q);
+        setSelectedCenter(c);
+        setPage(1);
+    }, [activeTab]);
 
     const fetchEmployeeTransferHistory = async () => {
         try {
@@ -293,48 +305,18 @@ const PendingApprovals = ({ activeTab }) => {
                 </div>
             </div>
 
-            <DataTable
+            <DataTableComponent
                 columns={columns}
                 data={data}
-                highlightOnHover
-                pagination
-                paginationServer
-                paginationTotalRows={pagination?.totalDocs}
-                paginationPerPage={limit}
-                paginationDefaultPage={page}
-                progressPending={loading}
-                striped
-                fixedHeader
-                fixedHeaderScrollHeight="500px"
-                dense={isMobile}
-                responsive
-                customStyles={{
-                    table: {
-                        style: {
-                            minHeight: "450px",
-                        },
-                    },
-                    headCells: {
-                        style: {
-                            backgroundColor: "#f8f9fa",
-                            fontWeight: "600",
-                            borderBottom: "2px solid #e9ecef",
-                        },
-                    },
-                    rows: {
-                        style: {
-                            minHeight: "60px",
-                            borderBottom: "1px solid #f1f1f1",
-                        },
-                    },
+                loading={loading}
+                pagination={pagination}
+                page={page}
+                setPage={setPage}
+                limit={limit}
+                setLimit={(newLimit) => {
+                    setLimit(newLimit);
+                    setPage(1);
                 }}
-                progressComponent={
-                    <div className="py-4 text-center">
-                        <Spinner className="text-primary" />
-                    </div>
-                }
-                onChangePage={(newPage) => setPage(newPage)}
-                onChangeRowsPerPage={(newLimit) => setLimit(newLimit)}
             />
         </>
     )

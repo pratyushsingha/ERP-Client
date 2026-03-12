@@ -16,6 +16,7 @@ import Select from "react-select";
 import { Spinner } from "reactstrap";
 import DataTable from "react-data-table-component";
 import { ExpandableText } from "../../../../../Components/Common/ExpandableText";
+import { useSearchParams } from "react-router-dom";
 
 const ApprovalHistory = ({ activeTab }) => {
   const dispatch = useDispatch();
@@ -28,9 +29,13 @@ const ApprovalHistory = ({ activeTab }) => {
     designationLoading,
   } = useSelector((state) => state.HR);
   const handleAuthError = useAuthError();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryDesignation = searchParams.get("q") || null;
+  const queryCenter = searchParams.get("center") || "ALL";
+  const queryHiringId = searchParams.get("id") || "";
   const [filters, setFilters] = useState({
-    center: "ALL",
-    designation: null,
+    center: queryCenter,
+    designation: queryDesignation,
     gender: null,
   });
   const [page, setPage] = useState(1);
@@ -117,6 +122,7 @@ const ApprovalHistory = ({ activeTab }) => {
           view: "HISTORY",
           ...(filters.designation ? { designation: filters.designation } : {}),
           ...(filters.gender ? { gender: filters.gender } : {}),
+          ...(queryHiringId !== "" && { hiringId: queryHiringId }),
         }),
       ).unwrap();
     } catch (error) {
@@ -281,6 +287,12 @@ const ApprovalHistory = ({ activeTab }) => {
                   center: opt?.value || "ALL",
                 }));
                 setPage(1);
+                if (queryHiringId) {
+                  setSearchParams((prev) => {
+                    prev.delete("id");
+                    return prev;
+                  });
+                }
               }}
               placeholder="All Centers"
             />
@@ -297,6 +309,12 @@ const ApprovalHistory = ({ activeTab }) => {
                   gender: opt ? opt.value : null,
                 }));
                 setPage(1);
+                if (queryHiringId) {
+                  setSearchParams((prev) => {
+                    prev.delete("id");
+                    return prev;
+                  });
+                }
               }}
               placeholder="Gender"
               isClearable
@@ -314,6 +332,12 @@ const ApprovalHistory = ({ activeTab }) => {
                   designation: opt ? opt.value : null,
                 }));
                 setPage(1);
+                if (queryHiringId) {
+                  setSearchParams((prev) => {
+                    prev.delete("id");
+                    return prev;
+                  });
+                }
               }}
               isLoading={designationLoading || loading}
               placeholder="Designation"

@@ -18,6 +18,7 @@ import DataTable from "react-data-table-component";
 import AddExitEmployeeModal from "../../../components/EditExitEmployeeModal";
 import DeleteConfirmModal from "../../../components/DeleteConfirmModal";
 import ApproveModal from "../../../components/ApproveModal";
+import { useSearchParams } from "react-router-dom";
 
 
 const PendingApprovals = ({ activeTab }) => {
@@ -25,11 +26,15 @@ const PendingApprovals = ({ activeTab }) => {
     const user = useSelector((state) => state.User);
     const { data, pagination, loading } = useSelector((state) => state.HR);
     const handleAuthError = useAuthError();
-    const [selectedCenter, setSelectedCenter] = useState("ALL");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const querySearch = searchParams.get("q") || "";
+    const queryCenter = searchParams.get("center") || "ALL";
+    const queryExitId = searchParams.get("id") || "";
+    const [selectedCenter, setSelectedCenter] = useState(queryCenter);
     const [page, setPage] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [search, setSearch] = useState(querySearch);
+    const [debouncedSearch, setDebouncedSearch] = useState(querySearch);
     const [limit, setLimit] = useState(10);
     const [modalOpen, setModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -84,10 +89,30 @@ const PendingApprovals = ({ activeTab }) => {
         const handler = setTimeout(() => {
             setDebouncedSearch(search);
             setPage(1);
+            setSearchParams((prev) => {
+                if (search.trim()) {
+                    prev.set("q", search);
+                } else {
+                    prev.delete("q");
+                    prev.delete("tab");
+                    prev.delete("center");
+                    prev.delete("id");
+                }
+                return prev;
+            });
         }, 500);
 
         return () => clearTimeout(handler);
     }, [search]);
+
+    useEffect(() => {
+        const q = searchParams.get("q") || "";
+        const c = searchParams.get("center") || "ALL";
+        setSearch(q);
+        setDebouncedSearch(q);
+        setSelectedCenter(c);
+        setPage(1);
+    }, [activeTab]);
 
     const fetchFNFExitEmployeeList = async () => {
         try {
@@ -101,7 +126,8 @@ const PendingApprovals = ({ activeTab }) => {
                 limit,
                 centers,
                 stage: "FNF_PENDING",
-                ...search.trim() !== "" && { search: debouncedSearch }
+                ...search.trim() !== "" && { search: debouncedSearch },
+                ...(queryExitId !== "" && { exitId: queryExitId })
             })).unwrap();
         } catch (error) {
             if (!handleAuthError(error)) {
@@ -316,6 +342,12 @@ const PendingApprovals = ({ activeTab }) => {
                                 onChange={(option) => {
                                     setSelectedCenter(option?.value);
                                     setPage(1);
+                                    if (queryExitId) {
+                                        setSearchParams((prev) => {
+                                            prev.delete("id");
+                                            return prev;
+                                        });
+                                    }
                                 }}
                                 options={centerOptions}
                                 placeholder="All Centers"
@@ -345,6 +377,12 @@ const PendingApprovals = ({ activeTab }) => {
                             onChange={(option) => {
                                 setSelectedCenter(option?.value);
                                 setPage(1);
+                                if (queryExitId) {
+                                    setSearchParams((prev) => {
+                                        prev.delete("id");
+                                        return prev;
+                                    });
+                                }
                             }}
                             options={centerOptions}
                             placeholder="All Centers"
@@ -440,7 +478,7 @@ const PendingApprovals = ({ activeTab }) => {
                     setSelectedEmployee(null)
                 }}
                 onSubmit={handleAction}
-                mode="EXIT_EMPLOYEES_EXIT_PENDING"
+                mode="EXIT_EMPLOYEES_FNF_PENDING"
                 loading={modalLoading}
                 actionType={actionType}
                 setActionType={setActionType}

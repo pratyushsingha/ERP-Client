@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuthError } from '../../../../Components/Hooks/useAuthError';
 import { usePermissions } from '../../../../Components/Hooks/useRoles';
@@ -23,11 +24,15 @@ const ExitApprovals = () => {
     const user = useSelector((state) => state.User);
     const { data, pagination, loading } = useSelector((state) => state.HR);
     const handleAuthError = useAuthError();
-    const [selectedCenter, setSelectedCenter] = useState("ALL");
+     const [searchParams, setSearchParams] = useSearchParams();
+    const querySearch = searchParams.get("q") || "";
+    const queryCenter = searchParams.get("center") || "ALL";
+    const queryExitId = searchParams.get("id") || "";
+    const [search, setSearch] = useState(querySearch);
+    const [debouncedSearch, setDebouncedSearch] = useState(querySearch);
+    const [selectedCenter, setSelectedCenter] = useState(queryCenter);
     const [page, setPage] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
     const [limit, setLimit] = useState(10);
     const [modalOpen, setModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -82,6 +87,17 @@ const ExitApprovals = () => {
         const handler = setTimeout(() => {
             setDebouncedSearch(search);
             setPage(1);
+            setSearchParams((prev) => {
+                if (search.trim()) {
+                    prev.set("q", search);
+                } else {
+                    prev.delete("q");
+                    prev.delete("tab");
+                    prev.delete("center");
+                    prev.delete("id");
+                }
+                return prev;
+            });
         }, 500);
 
         return () => clearTimeout(handler);
@@ -99,7 +115,8 @@ const ExitApprovals = () => {
                 limit,
                 centers,
                 stage: "EXIT_PENDING",
-                ...search.trim() !== "" && { search: debouncedSearch }
+                ...search.trim() !== "" && { search: debouncedSearch },
+                ...(queryExitId !== "" && { exitId: queryExitId })
             })).unwrap();
         } catch (error) {
             if (!handleAuthError(error)) {
@@ -336,6 +353,12 @@ const ExitApprovals = () => {
                                 onChange={(option) => {
                                     setSelectedCenter(option?.value);
                                     setPage(1);
+                                    if (queryExitId) {
+                                        setSearchParams((prev) => {
+                                            prev.delete("id");
+                                            return prev;
+                                        });
+                                    }
                                 }}
                                 options={centerOptions}
                                 placeholder="All Centers"
@@ -364,6 +387,12 @@ const ExitApprovals = () => {
                             onChange={(option) => {
                                 setSelectedCenter(option?.value);
                                 setPage(1);
+                                if (queryExitId) {
+                                    setSearchParams((prev) => {
+                                        prev.delete("id");
+                                        return prev;
+                                    });
+                                }
                             }}
                             options={centerOptions}
                             placeholder="All Centers"

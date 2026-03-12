@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useMediaQuery } from '../../../../Components/Hooks/useMediaQuery';
 import { usePermissions } from '../../../../Components/Hooks/useRoles';
 import { Button, CardBody, Input, Spinner, } from 'reactstrap';
@@ -15,9 +15,9 @@ import { capitalizeWords } from '../../../../utils/toCapitalize';
 import { renderStatusBadge } from '../../../../Components/Common/renderStatusBadge';
 import { format } from 'date-fns';
 import CheckPermission from '../../../../Components/HOC/CheckPermission';
-import DataTable from 'react-data-table-component';
 import Select from "react-select";
 import { ExpandableText } from '../../../../Components/Common/ExpandableText';
+import DataTableComponent from '../../../../Components/Common/DataTable';
 
 const TransferApprovals = () => {
     const navigate = useNavigate();
@@ -26,12 +26,13 @@ const TransferApprovals = () => {
     const user = useSelector((state) => state.User);
     const handleAuthError = useAuthError();
     const { data, pagination, loading } = useSelector((state) => state.HR);
-
+    const [searchParams] = useSearchParams();
+    const querySearch = searchParams.get("q") || "";
+    const [search, setSearch] = useState(querySearch);
+    const [debouncedSearch, setDebouncedSearch] = useState(querySearch);
     const [selectedCenter, setSelectedCenter] = useState("ALL");
     const [page, setPage] = useState(1);
     const [selectedRecord, setSelectedRecord] = useState(null);
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
     const [limit, setLimit] = useState(10);
     const [modalOpen, setModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -426,48 +427,18 @@ const TransferApprovals = () => {
                         </div>
                     </div>
 
-                    <DataTable
+                    <DataTableComponent
                         columns={columns}
                         data={data}
-                        highlightOnHover
-                        pagination
-                        paginationServer
-                        paginationTotalRows={pagination?.totalDocs}
-                        paginationPerPage={limit}
-                        paginationDefaultPage={page}
-                        progressPending={loading}
-                        striped
-                        fixedHeader
-                        fixedHeaderScrollHeight="500px"
-                        dense={isMobile}
-                        responsive
-                        customStyles={{
-                            table: {
-                                style: {
-                                    minHeight: "450px",
-                                },
-                            },
-                            headCells: {
-                                style: {
-                                    backgroundColor: "#f8f9fa",
-                                    fontWeight: "600",
-                                    borderBottom: "2px solid #e9ecef",
-                                },
-                            },
-                            rows: {
-                                style: {
-                                    minHeight: "60px",
-                                    borderBottom: "1px solid #f1f1f1",
-                                },
-                            },
+                        loading={loading}
+                        pagination={pagination}
+                        page={page}
+                        setPage={setPage}
+                        limit={limit}
+                        setLimit={(newLimit) => {
+                            setLimit(newLimit);
+                            setPage(1);
                         }}
-                        progressComponent={
-                            <div className="py-4 text-center">
-                                <Spinner className="text-primary" />
-                            </div>
-                        }
-                        onChangePage={(newPage) => setPage(newPage)}
-                        onChangeRowsPerPage={(newLimit) => setLimit(newLimit)}
                     />
 
                 </div>

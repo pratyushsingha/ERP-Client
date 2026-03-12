@@ -34,6 +34,7 @@ import {
 import { categoryOptions } from "../../../Components/constants/centralPayment";
 import { formatCurrency } from "../../../utils/formatCurrency";
 import { convertSnakeToTitle } from "../../../utils/convertSnakeToTitle";
+import { checkIsExcel } from "../../../utils/checkIsExcel";
 
 const DetailedReport = ({
   centers,
@@ -172,6 +173,12 @@ const DetailedReport = ({
       wrap: true,
     },
     {
+      name: <div>Finance Approved By</div>,
+      selector: (row) => capitalizeWords(row.financeApprovedBy?.name || "-"),
+      wrap: true,
+      minWidth: "120px",
+    },
+    {
       name: <div>Approved By</div>,
       selector: (row) => capitalizeWords(row.approvedBy?.name || "-"),
       wrap: true,
@@ -234,6 +241,7 @@ const DetailedReport = ({
       name: <div>Vendor</div>,
       selector: (row) => row.vendor?.toUpperCase() || "-",
       wrap: true,
+      minWidth: "150px",
     },
     {
       name: <div>Invoice No</div>,
@@ -336,6 +344,20 @@ const DetailedReport = ({
       maxWidth: "150px",
     },
     {
+      name: <div>Transaction Bank Name</div>,
+      cell: (row) => <span>{row?.transactionBankDetails?.bankName?.toUpperCase() || "-"}</span>,
+      wrap: true,
+      minWidth: "120px",
+      maxWidth: "150px",
+    },
+    {
+      name: <div>Transaction Account Number</div>,
+      cell: (row) => <span>{row?.transactionBankDetails?.accountNo?.toUpperCase() || "-"}</span>,
+      wrap: true,
+      minWidth: "120px",
+      maxWidth: "150px",
+    },
+    {
       name: <div>Initial Payment Status</div>,
       selector: (row) => {
         const status = row?.initialPaymentStatus;
@@ -349,6 +371,25 @@ const DetailedReport = ({
         if (status === "PENDING") return <span>To Be Paid</span>;
 
         return <span style={badgeStyle}>{status || "-"}</span>;
+      },
+      wrap: true,
+    },
+    {
+      name: <div>Finance Approval Status</div>,
+      selector: (row) => {
+        const status = row?.financeApprovalStatus;
+        return (
+          <Badge
+            color={getBadgeColor(status)}
+            style={{
+              display: "inline-block",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
+            }}
+          >
+            {capitalizeWords(status || "-")}
+          </Badge>
+        );
       },
       wrap: true,
     },
@@ -528,6 +569,7 @@ const DetailedReport = ({
             startDate: reportDate.start.toISOString(),
             endDate: reportDate.end.toISOString(),
           }),
+          tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
           ...(search !== "" && { search: parseInt(debouncedSearch) }),
         })
       ).unwrap();
@@ -566,6 +608,7 @@ const DetailedReport = ({
         approvalStatus: selectedApprovalStatus,
         currentPaymentStatus: selectedPaymentStatus,
         centers: selectedCentersIds,
+        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
         ...(dateFilterEnabled && {
           startDate: reportDate.start.toISOString(),
           endDate: reportDate.end.toISOString(),
@@ -849,6 +892,7 @@ const DetailedReport = ({
         file={previewFile}
         isOpen={previewOpen}
         toggle={closePreview}
+        allowDownload={checkIsExcel(previewFile)}
       />
     </TabPane>
   );

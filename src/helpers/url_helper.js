@@ -104,6 +104,10 @@ export const UNASSIGN_NURSE_TO_PATIENT = "/patient/unassign-nurse";
 
 export const GET_ICD_CODES = "/patient/get/icd";
 
+// BELONGINGS
+export const SEARCH_BELONGINGS = "/patient/belongings/search";
+export const PATIENT_BELONGING = "/patient/belongings";
+
 //TIMELINE
 export const GET_PATIENT_TIMELINE = "/timeline/patient";
 export const GET_USER_TIMELINE = "/timeline/user";
@@ -180,6 +184,10 @@ export const DELETE_BILL = "/bill";
 export const POST_RESTORE_BILL = "/bill/restore";
 export const DELETE_BILL_PERMANENTLY = "/bill/delete-permanently";
 
+// Write Off
+export const GET_WRITE_OFF = "/bill/get/write/off";
+export const POST_WRITE_OFF = "/bill/post/write/off";
+
 //MEDICINE
 export const GET_MEDICINES = "/medicine";
 export const GET_DELETED_MEDICINES = "/medicine/deleted";
@@ -199,8 +207,9 @@ export const GET_BILL_ITEMS = "/bill-setting";
 export const GET_ALL_BILL_ITEMS = "/bill-setting/all";
 export const EDIT_BILL_ITEM = "/bill-setting";
 export const GET_PROCEDURES_BY_ID = "/bill-setting/procedures";
-// export const GET_PROCEDURES_BY_CENTER_ID = "/bill-setting/get/procedures";
-export const DETELE_CENTER_IN_PROCEDURE = "/bill-setting/procedures/delete/center";
+export const GET_PROCEDURES_BY_CENTER_ID = "/bill-setting/get/procedures";
+export const DETELE_CENTER_IN_PROCEDURE =
+  "/bill-setting/procedures/delete/center";
 export const ADD_CENTERS_IN_PROCEDURE = "/bill-setting/procedures/add/center";
 export const GET_CATEGORIES_OF_PROCEDURE =
   "/bill-setting/procedures/get/catgeories";
@@ -426,8 +435,9 @@ export const GET_OWNER_LEAD_STATUS = "/mi-reporting/owner-lead-status";
 // HR
 export const GET_EMPLOYEE_ID = "/hr/employee-id";
 export const EMPLOYEE = "/hr/employee";
-export const EMPLOYEE_FINANCE = "/hr/employee/finance";
+export const EMPLOYEE_DETAILS = "/hr/employee/details";
 export const EMPLOYEE_EMAILS = "/hr/employee/emails";
+export const EMPLOYEE_BY_KEY = "/hr/employee/by-key";
 
 export const NEW_JOINING_ACTION = "/hr/employee/new-joining";
 
@@ -474,6 +484,9 @@ export const UPDATE_PAYROLL_REMARKS = "/hr/payroll/remarks";
 export const MONTHLY_PAYROLL_TEMPLATE = "/hr/payroll/monthly/template";
 export const PAYROLL_ACTION = "/hr/payroll/action";
 export const PAYROLL_BULK_ACTION = "/hr/payroll/bulk-action";
+export const GET_DEPARTMENTS = "/hr/get/departments";
+export const CREATE_DEPARTMENTS = "/hr/create/departments";
+export const GET_APPROVAL_INBOX = "/hr/approval-inbox";
 
 // HRMS
 export const GET_BALANCE_LEAVES = "/hrms/get/my/balance/leaves";
@@ -489,6 +502,7 @@ export const ATTENDANCE_SUMMARY = "/hrms/attendance/summary";
 export const ATTENDANCE_LOGS = "/hrms/attendance/detailed";
 export const EMPLOYEE_CHECK_IN = "/hrms/attendance/check-in";
 export const EMPLOYEE_CHECK_OUT = "/hrms/attendance/check-out";
+export const REFETCH_BIOMETRIC_ATTENDANCE = "/hr/attendance/trigger-import";
 
 export const MONTHLY_ATTENDANCE = "/hr/attendance/monthly";
 export const UPLOAD_MONTHLY_ATTENDANCE = "/hr/attendance/monthly/upload";
@@ -515,8 +529,23 @@ export const REQUEST_REGULARIZATION = "/hrms/request/regularization";
 export const GET_MY_REGULARIZATION = "/hrms/get/my/regularizations";
 export const GET_REGULARIZATION_REQUESTS = "/hrms/get/regularizations/requests";
 export const UPDATE_REGULARIZATION = "/hrms/regularize";
-export const GET_DEPARTMENTS = "/hr/get/departments";
-export const CREATE_DEPARTMENTS = "/hr/create/departments";
+
+// CAPACITY ASSESSMENT FORM
+export const SUBMIT_ASSESSMENT_FROM =
+  "/patient/capacity-assessment-submit-file";
 
 // upload file
 export const UPLOAD_FILE = "/upload";
+
+// TALLY
+export const POST_TALLY_SEND = "/tally/send";
+export const GET_TALLY_LOGS = "/tally/logs";
+
+// Issues
+export const GET_ISSUES = "/issues/get"
+export const GET_MY_ISSUES = "/issues/my/tickets"
+export const CHANGE_STATUS = "/issues/change/status"
+export const APPROVE_ISSUE = "/issues/approval"
+export const POST_ISSUE = "/issues/post"
+
+export const GET_TICKET_DASHBOARD_DATA = "/issues/get/dashboard-data"

@@ -5,8 +5,9 @@ import { Spinner, Button } from "reactstrap";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { downloadFile } from "./downloadFile";
 import * as XLSX from "xlsx";
+import axios from "axios";
 
-const PreviewFile = ({ title = "Preview File", file, isOpen, toggle }) => {
+const PreviewFile = ({ title = "Preview File", file, isOpen, toggle, allowDownload = false }) => {
   const [loading, setLoading] = useState(true);
   const [excelData, setExcelData] = useState([]);
 
@@ -43,28 +44,55 @@ const PreviewFile = ({ title = "Preview File", file, isOpen, toggle }) => {
     }
   }, [file, isLocalExcel]);
 
-  const footer = (
-    <div className="d-flex w-100 justify-content-end">
-      <Button
-        className="text-white"
-        color="primary"
-        onClick={() => downloadFile(file)}
-      >
-        <i className="ri-download-2-line align-bottom me-1"></i> Download
-      </Button>
-    </div>
-  );
+  const handleDownload = () => {
+    if (isImage && url) {
+      axios
+        .get(url, { responseType: "blob" })
+        .then((res) => {
+          const blob = res.data || res;
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = blobUrl;
+          link.download = file?.originalName || "download";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(blobUrl);
+        })
+        .catch(() => {
+          downloadFile(file);
+        });
+    } else {
+      downloadFile(file);
+    }
+  };
 
   if (!file) return null;
+
+  const headerTitle = (
+    <>
+      <span className="me-3">{title}</span>
+      {allowDownload && (
+        <Button
+          className="text-white mt-1"
+          color="primary"
+          size="sm"
+          onClick={handleDownload}
+          style={{ position: "absolute", right: "50px", top: "12px", zIndex: 10 }}
+        >
+          <i className="ri-download-2-line align-bottom me-1"></i> Download
+        </Button>
+      )}
+    </>
+  );
 
   return (
     <CustomModal
       size="xl"
       centered
-      title={title}
+      title={headerTitle}
       isOpen={isOpen}
       toggle={toggle}
-      footer={(isExcel && !isLocalExcel) ? footer : null}
     >
       {loading && (isPdf || isImage) && (
         <div
@@ -163,6 +191,7 @@ PreviewFile.propTypes = {
   }),
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  allowDownload: PropTypes.bool,
 };
 
 export default PreviewFile;

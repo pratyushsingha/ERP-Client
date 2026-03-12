@@ -17,6 +17,7 @@ const Navdata = () => {
     (page) => page && page.id !== "hrms",
   );
 
+  console.log("User Pages:", userPages);
   const sortPages = (routes) => {
     const sortOrder = [
       "nurse",
@@ -37,8 +38,10 @@ const Navdata = () => {
       "pharmacy",
       "guidelines",
       "hr",
+      "issues",
       // "hrms",
       "webcamstats",
+      "tally",
     ];
 
     routes?.sort((a, b) => {
@@ -72,7 +75,10 @@ const Navdata = () => {
       link: "/centers",
     },
     ...sortPages(filteredDynamicPages),
+    // pages.find((p) => p.id === "issues"),
   ];
+
+  console.log({ userPages, menuItems });
 
   return <React.Fragment>{menuItems}</React.Fragment>;
 };

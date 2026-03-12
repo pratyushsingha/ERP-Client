@@ -11,7 +11,7 @@ import { useAuthError } from "../../../../../Components/Hooks/useAuthError";
 import { toast } from "react-toastify";
 import classnames from "classnames";
 import { usePermissions } from "../../../../../Components/Hooks/useRoles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 
@@ -19,16 +19,21 @@ const GetRegularizationsRequest = () => {
   const isMobile = useMediaQuery("(max-width: 1000px)");
   const handleAuthError = useAuthError();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const querySearch = searchParams.get("q") || "";
+  const queryCenter = searchParams.get("center") || "ALL";
+  const queryRegularizationId = searchParams.get("id") || "";
+  const [search, setSearch] = useState(querySearch);
+  const [debouncedSearch, setDebouncedSearch] = useState(querySearch);
   const [loading, setLoading] = useState(false);
   const [requestsData, setRequestsData] = useState([]);
-  const [activeTab, setActiveTab] = useState("pending");
+  const queryTab = searchParams.get("tab") || "pending";
+  const [activeTab, setActiveTab] = useState(queryTab);
   const [selectedYear, setSelectedYear] = useState("all");
-  const [selectedMonth, setSelectedMonth] = useState("all");
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+const [selectedMonth, setSelectedMonth] = useState("all");
   const [actionLoadingId, setActionLoadingId] = useState(null);
   const user = useSelector((state) => state.User);
-  const [selectedCenter, setSelectedCenter] = useState("ALL");
+  const [selectedCenter, setSelectedCenter] = useState(queryCenter);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -54,12 +59,12 @@ const GetRegularizationsRequest = () => {
   const centerOptions = [
     ...(user?.centerAccess?.length > 1
       ? [
-          {
-            value: "ALL",
-            label: "All Centers",
-            isDisabled: false,
-          },
-        ]
+        {
+          value: "ALL",
+          label: "All Centers",
+          isDisabled: false,
+        },
+      ]
       : []),
     ...(user?.centerAccess?.map((id) => {
       const center = user?.userCenters?.find((c) => c._id === id);
@@ -106,6 +111,7 @@ const GetRegularizationsRequest = () => {
         year: selectedYear,
         month: selectedMonth,
         ...(debouncedSearch && { search: debouncedSearch }),
+        ...(queryRegularizationId !== "" && { regularizationId: queryRegularizationId }),
       });
 
       setRequestsData(res?.data || []);
@@ -120,7 +126,7 @@ const GetRegularizationsRequest = () => {
   };
 
   useEffect(() => {
-     if (!hasUserPermission) navigate("/unauthorized");
+    if (!hasUserPermission) navigate("/unauthorized");
     fetchData();
   }, [
     page,
@@ -136,6 +142,17 @@ const GetRegularizationsRequest = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search.trim().toLowerCase());
+      setSearchParams((prev) => {
+        if (search.trim()) {
+          prev.set("q", search);
+        } else {
+          prev.delete("q");
+          prev.delete("tab");
+          prev.delete("center");
+          prev.delete("id");
+        }
+        return prev;
+      });
     }, 500);
 
     return () => clearTimeout(handler);
@@ -159,7 +176,7 @@ const GetRegularizationsRequest = () => {
     { value: 11, label: "Dec" },
   ];
 
- 
+
 
   const handleAction = async (id, status) => {
     console.log("Id in function", id);
@@ -191,7 +208,16 @@ const GetRegularizationsRequest = () => {
           <NavItem key={tab}>
             <NavLink
               className={classnames({ active: activeTab === tab })}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => {
+                setActiveTab(tab);
+                setPage(1);
+                if (queryRegularizationId) {
+                  setSearchParams((prev) => {
+                    prev.delete("id");
+                    return prev;
+                  });
+                }
+              }}
               style={{ cursor: "pointer", fontWeight: 500 }}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -207,6 +233,12 @@ const GetRegularizationsRequest = () => {
             onChange={(option) => {
               setSelectedCenter(option?.value);
               setPage(1);
+              if (queryRegularizationId) {
+                setSearchParams((prev) => {
+                  prev.delete("id");
+                  return prev;
+                });
+              }
             }}
             options={centerOptions}
             placeholder="All Centers"
@@ -227,7 +259,16 @@ const GetRegularizationsRequest = () => {
           className="form-select form-select-sm"
           style={{ width: "120px" }}
           value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
+          onChange={(e) => {
+            setSelectedYear(e.target.value);
+            setPage(1);
+            if (queryRegularizationId) {
+              setSearchParams((prev) => {
+                prev.delete("id");
+                return prev;
+              });
+            }
+          }}
         >
           <option value="all">All Years</option>
           {allYears.map((y) => (

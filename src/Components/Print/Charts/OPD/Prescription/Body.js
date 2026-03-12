@@ -254,7 +254,7 @@ const PrescriptionBody = ({ chart, doctor }) => {
             </Text>
           </View>
         )}
-        {chart?.ICD10_Code2 && (
+        {chart?.ICD10_Code2 ? (
           <View wrap={false} style={{ ...styles.mrgnTop10 }}>
             <Text style={{ ...styles.instr }}>
               Diagnosis ICD10 Code 2 :{" "}
@@ -266,11 +266,51 @@ const PrescriptionBody = ({ chart, doctor }) => {
                   ...styles.textWrap,
                 }}
               >
-                {chart?.ICD10_Code2}
+                {chart.ICD10_Code2}
               </Text>
             </Text>
           </View>
-        )}
+        ) : Array.isArray(chart?.icdCode2) ? (
+          chart.icdCode2.length > 0 && (
+            <View
+              wrap={false}
+              style={{
+                ...styles.mrgnTop10,
+                flexDirection: "row",
+                alignItems: "flex-start",
+              }}
+            >
+              {/* Header Column */}
+              <Text
+                style={{
+                  ...styles.instr,
+                  width: 125,
+                }}
+              >
+                Diagnosis ICD10 Code 2 :
+              </Text>
+
+              {/* Codes Column */}
+              <View style={{ flex: 1 }}>
+                {chart.icdCode2
+                  .filter(item => item?.code)
+                  .map((item, index) => (
+                    <Text
+                      key={item?.code_id || index}
+                      style={{
+                        ...styles.textGray,
+                        ...styles.fontNormal,
+                        marginBottom: 2,
+                      }}
+                    >
+                      {item.code}
+                      {index !== chart.icdCode2.length - 1 ? "," : ""}
+                    </Text>
+                  ))}
+              </View>
+            </View>
+          )
+        ) : null}
         {/* <View style={{ ...styles.mrgnTop10 }}>
           <Text style={{ ...styles.fontBold }}>
             Next Visit:{" "}
@@ -308,7 +348,7 @@ const PrescriptionBody = ({ chart, doctor }) => {
             {safeText(
               "",
               { lineHeight: 1.2, marginBottom: 3, ...styles.textCapitalize },
-              doctor?.name ? `${doctor.name}` : ""
+              doctor?.name ? `${doctor.name}` : "",
             )}
             {safeText(
               "",
@@ -317,7 +357,7 @@ const PrescriptionBody = ({ chart, doctor }) => {
                 ...styles.fontNormal,
                 ...styles.textCapitalize,
               },
-              doctor?.degrees
+              doctor?.degrees,
             )}
             {safeText(
               "",
@@ -326,7 +366,7 @@ const PrescriptionBody = ({ chart, doctor }) => {
                 ...styles.fontNormal,
                 ...styles.textCapitalize,
               },
-              doctor?.speciality
+              doctor?.speciality,
             )}
             {safeText(
               "Reg. No.",
@@ -335,7 +375,7 @@ const PrescriptionBody = ({ chart, doctor }) => {
                 ...styles.fontNormal,
                 ...styles.textCapitalize,
               },
-              doctor?.registrationNo
+              doctor?.registrationNo,
             )}
           </View>
         </View>

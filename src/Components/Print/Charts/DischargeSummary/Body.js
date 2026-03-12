@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   preText: {
-    whiteSpace: "pre-line",
     lineHeight: 1.3,
     paddingLeft: 5,
   },
@@ -124,7 +123,7 @@ const SummaryBody = ({ chart, patient }) => {
   // };
   return (
     <React.Fragment>
-      <View style={styles.body}>
+      <View style={styles.body} wrap>
         <Text
           style={{
             ...styles.fontSize13,
@@ -146,7 +145,6 @@ const SummaryBody = ({ chart, patient }) => {
             <Text style={styles.preText}>{clean(data?.presentingSymptoms) || ""}</Text>
           </View>
         )}
-        {/* MSE AT ADDMISSION */}
         <MseAtAddmission data={data} styles={styles} />
         {!!data?.pastHistory && (
           <View style={styles.marginBottom}>
@@ -346,7 +344,7 @@ const SummaryBody = ({ chart, patient }) => {
             </Text>
           </View>
         )}
-        {(data?.medicine?.length || data?.followUp || data?.note) && (
+        {!!(data?.medicine?.length || data?.followUp || data?.note) && (
           <View>
             <Text style={styles.fontSize13}>ADVISE ON DISCHARGE:</Text>
           </View>
