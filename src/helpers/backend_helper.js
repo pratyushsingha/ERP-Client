@@ -1816,6 +1816,19 @@ export const getEmployees = (params = {}) => {
   });
 };
 
+export const exportEmployeesXLSX = (params = {}) => {
+  return api.get(url.EMPLOYEE, {
+    params: { ...params, isExcel: true },
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+    responseType: "blob",
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: "repeat" });
+    },
+  });
+};
+
 export const deleteEmployee = (id) => {
   return api.delete(`${url.EMPLOYEE}/${id}`, {
     headers: {
@@ -2176,6 +2189,34 @@ export const getTPMs = (params = {}) => {
 
 export const deleteTPM = (id) => {
   return api.delete(`${url.TPM}/${id}`, {
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const getFinance = (params = {}) => {
+  return api.get(url.FINANCE, {
+    params,
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: "repeat" });
+    },
+  });
+};
+
+export const editFinance = (id, data) => {
+  return api.update(`${url.FINANCE}/${id}`, data, {
+    headers: {
+      "X-No-Cookie-Token": "true",
+    },
+  });
+};
+
+export const changeSalary = (data) => {
+  return api.create(url.CHANGE_SALARY, data, {
     headers: {
       "X-No-Cookie-Token": "true",
     },

@@ -14,6 +14,7 @@ import AttendanceCalendar from "./AttendanceCalender";
 import { usePermissions } from "../../../Components/Hooks/useRoles";
 import { allViewPermissionRoles } from "../../../Components/constants/HRMS";
 import RegularizeModal from "../../../Components/Common/RegularizeModal";
+import LeaveModal from "./LeaveModal";
 import RefreshButton from "../../../Components/Common/RefreshButton";
 
 const AttendanceLogs = ({ employeeId, centerId }) => {
@@ -24,6 +25,7 @@ const AttendanceLogs = ({ employeeId, centerId }) => {
   const [limit, setLimit] = useState(10);
   const [viewMode, setViewMode] = useState("table");
   const [regularizeModalOpen, setRegularizeModalOpen] = useState(false);
+  const [leaveModalOpen, setLeaveModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
   const { data, loading, pagination } = useSelector((state) => state.HRMS);
@@ -42,6 +44,8 @@ const AttendanceLogs = ({ employeeId, centerId }) => {
 
   const hasWriteForMetrics = hasPermission("HR", "ATTENDANCE_METRICS", "WRITE");
   const hasDeleteForMetrics = hasPermission("HR", "ATTENDANCE_METRICS", "DELETE");
+
+  const hasMyRegularizationPermission = hasPermission("HR", "MY_ATTENDANCE_REGULARIZATION", "WRITE") || hasPermission("HR", "MY_ATTENDANCE_REGULARIZATION", "DELETE");
 
   const loadMyAttendanceLogs = async () => {
     try {
@@ -103,8 +107,11 @@ const AttendanceLogs = ({ employeeId, centerId }) => {
     hasUserAllViewPermission,
     setSelectedRow,
     setRegularizeModalOpen,
+    setLeaveModalOpen,
     loading,
-    canShowActionButton
+    canShowActionButton,
+    hasMyRegularizationPermission,
+    isSelf: !employeeId
   });
 
   const reloadAttendance = () => {
@@ -174,6 +181,14 @@ const AttendanceLogs = ({ employeeId, centerId }) => {
       <RegularizeModal
         isOpen={regularizeModalOpen}
         toggle={() => setRegularizeModalOpen(false)}
+        row={selectedRow}
+        onSuccess={reloadAttendance}
+        employeeId={employeeId}
+      />
+
+      <LeaveModal
+        isOpen={leaveModalOpen}
+        toggle={() => setLeaveModalOpen(false)}
         row={selectedRow}
         onSuccess={reloadAttendance}
         employeeId={employeeId}
